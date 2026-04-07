@@ -2,17 +2,17 @@ package handlers
 
 import (
 	"koda-b6-url-shortener/internal/models"
-	service "koda-b6-url-shortener/internal/services"
+	"koda-b6-url-shortener/internal/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
-	service *service.UserService
+	service *services.UserService
 }
 
-func NewUserHandler(sr *service.UserService) *UserHandler {
+func NewUserHandler(sr *services.UserService) *UserHandler {
 	return &UserHandler{
 		service: sr,
 	}
