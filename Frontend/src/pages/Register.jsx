@@ -4,6 +4,8 @@ import { Footer } from "../components/Footer"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import http from "../lib/http.js"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 // Import icons
 import { HiOutlineMail } from "react-icons/hi"
@@ -11,22 +13,22 @@ import { GoKey } from "react-icons/go"
 import { FiEye } from "react-icons/fi"
 import { FaRegUser } from "react-icons/fa"
 
+const registerSchema = yup.object({
+    fullname: yup.string().required("Name must be filled"),
+    email: yup.string().required("Email must be filled").email("Email Invalid"),
+    password: yup.string().required("Password must be filled").min(8, "Password minimum 8 characters"),
+    confirmPassword: yup.string().required("Confirm password must be filled").oneOf([yup.ref("password")], "Password not match")
+})
 
 export const RegisterPage = () => {
-    const { handleSubmit, register } = useForm()
+    const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm({ resolver: yupResolver(registerSchema) })
     const navigate = useNavigate()
 
     // State untuk UI
-    const [isLoading, setIsLoading] = useState(false)
     const [changePassword, setChangePassword] = useState(true)
     const [changeConfirm, setChangeConfirm] = useState(true)
 
     const submitForm = async (data) => {
-        if (data.password !== data.confirmPassword) {
-            return alert("Password and Confirm Password not match")
-        }
-
-        setIsLoading(true)
         try {
             const response = await http("/api/register", {
                 method: "POST",
@@ -37,15 +39,15 @@ export const RegisterPage = () => {
                 }
             })
 
-            if (response) {
-                alert("Registrasi success.")
+            if (response.success) {
+                alert("Registration success.")
                 navigate("/login")
+            } else {
+                alert(response.message || "Register failed")
             }
         } catch (error) {
             console.error("Register error:", error)
-            alert("Register error.")
-        } finally {
-            setIsLoading(false)
+            alert(error.response?.data?.message || "Register error.")
         }
     }
 
@@ -66,6 +68,9 @@ export const RegisterPage = () => {
                     >
                         Full Name
                     </InputForm>
+                    {errors.fullname && (
+                        <p className="text-red-500 text-sm">{errors.fullname.message}</p>
+                    )}
                     <InputForm
                         type={"email"}
                         id={"email"}
@@ -76,6 +81,9 @@ export const RegisterPage = () => {
                     >
                         Email
                     </InputForm>
+                    {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email.message}</p>
+                    )}
 
                     <InputForm
                         type={changePassword ? "password" : "text"}
@@ -88,6 +96,9 @@ export const RegisterPage = () => {
                     >
                         Password
                     </InputForm>
+                    {errors.password && (
+                        <p className="text-red-500 text-sm">{errors.password.message}</p>
+                    )}
 
                     <InputForm
                         type={changeConfirm ? "password" : "text"}
@@ -100,15 +111,20 @@ export const RegisterPage = () => {
                     >
                         Confirm Password
                     </InputForm>
+                    {errors.confirmPassword && (
+                        <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+                    )}
 
                     {/* Register button */}
                     <button
-                        className={`w-2/3 px-8 py-3 text-white rounded-xl transition-all ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-700 hover:bg-blue-800"
+                        className={`w-2/3 px-8 py-3 text-white rounded-xl transition-all ${isSubmitting
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-blue-700 hover:bg-blue-800"
                             }`}
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                     >
-                        {isLoading ? "Sending..." : "Sign up"}
+                        {isSubmitting ? "Signing up..." : "Sign up"}
                     </button>
                 </div>
                 <span className="mb-5">
