@@ -4,6 +4,8 @@ import { Footer } from "../components/Footer"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import http from "../lib/http.js"
+import * as yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
 
 //import icons
 import { HiOutlineMail } from "react-icons/hi"
@@ -11,18 +13,22 @@ import { GoKey } from "react-icons/go"
 import { FiEye } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 
+const loginSchema = yup.object({
+    email: yup.string().required("Email must be filled").email("Email Invalid"),
+    password: yup.string().required("Password must be filled").min(8, "Password min 8 characters")
+})
 
 export const LoginPage = () => {
-    const { handleSubmit, register } = useForm()
+    const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm({
+        resolver: yupResolver(loginSchema)
+    })
+
     const navigate = useNavigate()
-    const [isLoading, setIsLoading] = useState(false)
 
     //show-hide password
     const [changePassword, setChangePassword] = useState(true)
-    const changeIcon = changePassword === true ? false : true
 
     async function submitForm(data) {
-        setIsLoading(true)
         try {
             const response = await http("/api/login", {
                 method: "POST",
@@ -44,8 +50,6 @@ export const LoginPage = () => {
         } catch (error) {
             console.log(error)
             alert("Connection error, please try again.")
-        } finally {
-            setIsLoading(false)
         }
     }
 
@@ -60,6 +64,8 @@ export const LoginPage = () => {
                         <span className="text-2xl font-extrabold">Welcome Back</span>
                         <span>Please enter your details to sign in.</span>
                     </div>
+
+                    {/* EMAIL */}
                     <InputForm
                         type={"email"}
                         id={"email"}
@@ -70,6 +76,11 @@ export const LoginPage = () => {
                     >
                         Email
                     </InputForm>
+                    {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email.message}</p>
+                    )}
+
+                    {/* PASSWORD */}
                     <InputForm
                         type={changePassword ? "password" : "text"}
                         id={"password"}
@@ -77,18 +88,28 @@ export const LoginPage = () => {
                         icon={<GoKey />}
                         register={register}
                         placeholder={"Enter Your Password"}
-                        eye={<FiEye className="cursor-pointer" onClick={() => { setChangePassword(changeIcon) }} />}
+                        eye={
+                            <FiEye
+                                className="cursor-pointer"
+                                onClick={() => setChangePassword(!changePassword)}
+                            />
+                        }
                     >
                         Password
                     </InputForm>
+                    {errors.password && (
+                        <p className="text-red-500 text-sm">{errors.password.message}</p>
+                    )}
 
                     {/* login button */}
                     <button
-                        className={`w-2/3 px-8 py-3 text-white rounded-xl ${isLoading ? 'bg-gray-400' : 'bg-blue-700'}`}
+                        className={`w-2/3 px-8 py-3 text-white rounded-xl ${
+                            isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800'
+                        }`}
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                     >
-                        {isLoading ? "Signing in..." : "Log In"}
+                        {isSubmitting ? "Signing in..." : "Log In"}
                     </button>
 
                     <span className="text-gray-600">OR CONTINUE WITH</span>
@@ -102,8 +123,15 @@ export const LoginPage = () => {
                         Sign in with Google
                     </button>
                 </div>
-                <span className="mb-5">Dont have an account? <Link to="/register" className="text-blue-800">Sign up</Link></span>
+
+                <span className="mb-5">
+                    Dont have an account?{" "}
+                    <Link to="/register" className="text-blue-800">
+                        Sign up
+                    </Link>
+                </span>
             </form>
+
             <Footer />
         </div>
     )
