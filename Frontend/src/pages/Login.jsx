@@ -8,6 +8,7 @@ import { GoKey } from "react-icons/go"
 import { FiEye } from "react-icons/fi"
 import { Footer } from "../components/Footer"
 import { Link } from "react-router-dom"
+import { FcGoogle } from "react-icons/fc";
 
 
 export const LoginPage = () => {
@@ -66,8 +67,9 @@ export const LoginPage = () => {
 
                     {/* login with google */}
                     <button
-                        className="w-2/3 px-8 py-3 border border-black rounded-xl"
+                        className="w-2/3 px-8 py-3 border border-black rounded-xl flex items-center justify-center gap-3"
                     >
+                        <FcGoogle className="w-7 h-7"/>
                         Sign in with Google
                     </button>
                 </div>
