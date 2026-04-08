@@ -144,10 +144,7 @@ func (h *LinkHandler) Redirect(ctx *gin.Context) {
 
 	originalURL, err := h.svc.GetOriginalURL(slug)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, models.Response{
-			Success: false,
-			Message: "Short link not found",
-		})
+		ctx.Redirect(http.StatusFound, "http://localhost:5173/page-not-found")
 		return
 	}
 
