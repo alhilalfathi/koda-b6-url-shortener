@@ -6,6 +6,7 @@ import { DashboardPage } from "./pages/Dashboard";
 import { CreateLink } from "./pages/CreateLink";
 import { Profile } from "./pages/Profile";
 import { NotFoundPage } from "./pages/NotFound";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
     {
@@ -22,15 +23,27 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <DashboardPage />
+        element: (
+            <ProtectedRoute>
+                <DashboardPage />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/create-link",
-        element: <CreateLink />
+        element: (
+            <ProtectedRoute>
+                <CreateLink />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/profile",
-        element: <Profile />
+        element: (
+            <ProtectedRoute>
+                <Profile />
+            </ProtectedRoute>
+        )
     },
     {
         path: "/page-not-found",
