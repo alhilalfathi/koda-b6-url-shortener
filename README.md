@@ -113,3 +113,11 @@ cp .env.example .env # Pastikan API_URL mengarah ke localhost:8888
 npm install
 npm start  # atau npm run dev (jika menggunakan Vite)
 ```
+| Method | Endpoint | Deskripsi |
+|---|---|---|
+| `POST` | `/api/links` | Membuat link pendek (Input: `long_url`, `custom_slug`) |
+| `POST` | `/api/register` | Register |
+| `POST` | `/api/login` | Login |
+| `GET` | `/:slug` | Redirect ke URL asli |
+| `GET` | `/api/links` | Mendapatkan link user |
+| `DELETE` | `/api/links/:id` | Menghapus link user |
