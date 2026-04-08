@@ -84,7 +84,7 @@ docker-compose up --build -d
 
 ### 4. Akses Aplikasi:
 
-- Frontend (UI): http://localhost:3000 (atau port sesuai konfigurasi)
+- Frontend (UI): http://localhost:5173 (atau port sesuai konfigurasi)
 
 - Backend (API): http://localhost:8888
 
