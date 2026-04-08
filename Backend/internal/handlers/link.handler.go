@@ -38,6 +38,7 @@ func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, models.Response{
 			Success: false,
 			Message: "Invalid request body",
+			Results: nil,
 			Error:   err.Error(),
 		})
 		return
@@ -48,6 +49,7 @@ func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, models.Response{
 			Success: false,
 			Message: "Unauthorized",
+			Results: nil,
 		})
 		return
 	}
@@ -57,6 +59,7 @@ func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, models.Response{
 			Success: false,
 			Message: "Failed to create link",
+			Results: nil,
 			Error:   err.Error(),
 		})
 		return
