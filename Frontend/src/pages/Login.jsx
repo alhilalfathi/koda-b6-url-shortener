@@ -56,7 +56,7 @@ export const LoginPage = () => {
     return (
         <div>
             <form onSubmit={handleSubmit(submitForm)} className="flex flex-col items-center bg-[#f7f8fa] justify-center min-h-screen">
-                <h1 className="flex text-2xl font-extrabold text-black mt-10">ShortLink</h1>
+                <h1 className="flex text-2xl font-extrabold text-black mt-10"><Link to="/">ShortLink</Link></h1>
 
                 {/* whitebox */}
                 <div className="flex flex-col gap-5 items-center bg-white w-120 h-auto py-10 mt-5 mb-5 rounded shadow-sm">
