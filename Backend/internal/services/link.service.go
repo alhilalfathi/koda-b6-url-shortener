@@ -49,7 +49,7 @@ func (s *LinkService) CreateLink(req models.CreateLinkRequest, userID int) (*mod
 	return &models.LinkResponse{
 		OriginalURL: newLink.OriginalURL,
 		Slug:        newLink.Slug,
-		ShortenURL:  fmt.Sprintf("http://localhost:8080/%s", newLink.Slug),
+		ShortenURL:  fmt.Sprintf("http://localhost:8888/%s", newLink.Slug),
 	}, nil
 }
 
@@ -75,7 +75,7 @@ func (s *LinkService) GetUserLinks(userID int) ([]models.LinkResponse, error) {
 			Id:          l.Id,
 			OriginalURL: l.OriginalURL,
 			Slug:        l.Slug,
-			ShortenURL:  fmt.Sprintf("http://localhost:8080/%s", l.Slug),
+			ShortenURL:  fmt.Sprintf("http://localhost:8888/%s", l.Slug),
 			CreatedAt:   l.CreatedAt,
 		})
 	}
