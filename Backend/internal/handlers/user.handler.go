@@ -18,6 +18,16 @@ func NewUserHandler(sr *services.UserService) *UserHandler {
 	}
 }
 
+// GetById godoc
+// @Summary Get user by ID
+// @Description Retrieve user detail by ID
+// @Tags users
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Failure 404 {object} models.Response
+// @Router /api/users/{id} [get]
 func (h *UserHandler) GetById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	user, err := h.service.GetById(id)
@@ -43,6 +53,17 @@ func (h *UserHandler) GetById(ctx *gin.Context) {
 	})
 }
 
+// Create godoc
+// @Summary Register user
+// @Description Create new user account
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body models.CreateUserRequest true "Register Request"
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Router /api/register [post]
 func (h *UserHandler) Create(ctx *gin.Context) {
 	var newUser models.CreateUserRequest
 
@@ -67,6 +88,17 @@ func (h *UserHandler) Create(ctx *gin.Context) {
 	})
 }
 
+// Login godoc
+// @Summary Login user
+// @Description Authenticate user and return JWT token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body models.LoginUserRequest true "Login Request"
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Failure 401 {object} models.Response
+// @Router /api/login [post]
 func (h *UserHandler) Login(ctx *gin.Context) {
 	var req models.LoginUserRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {

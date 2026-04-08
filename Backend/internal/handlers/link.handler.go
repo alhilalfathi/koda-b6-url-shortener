@@ -18,6 +18,19 @@ func NewLinkHandler(s *services.LinkService) *LinkHandler {
 	}
 }
 
+// CreateLink godoc
+// @Summary Create short link
+// @Description Generate short link from original URL
+// @Tags links
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body models.CreateLinkRequest true "Create Link Request"
+// @Success 201 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Failure 401 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Router /api/links [post]
 func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 	var req models.CreateLinkRequest
 
@@ -30,7 +43,7 @@ func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 		return
 	}
 
-	userID, exists := ctx.Get("user_id")
+	userID, exists := ctx.Get("userId")
 	if !exists {
 		ctx.JSON(http.StatusUnauthorized, models.Response{
 			Success: false,
@@ -56,8 +69,17 @@ func (h *LinkHandler) CreateLink(ctx *gin.Context) {
 	})
 }
 
+// GetUserLinks godoc
+// @Summary Get user links
+// @Description Get all links owned by authenticated user
+// @Tags links
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Router /api/links [get]
 func (h *LinkHandler) GetUserLinks(ctx *gin.Context) {
-	userID, _ := ctx.Get("user_id")
+	userID, _ := ctx.Get("userId")
 
 	links, err := h.svc.GetUserLinks(userID.(int))
 	if err != nil {
@@ -76,9 +98,19 @@ func (h *LinkHandler) GetUserLinks(ctx *gin.Context) {
 	})
 }
 
+// DeleteLink godoc
+// @Summary Delete link
+// @Description Delete a link by ID
+// @Tags links
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Link ID"
+// @Success 200 {object} models.Response
+// @Failure 403 {object} models.Response
+// @Router /api/links/{id} [delete]
 func (h *LinkHandler) DeleteLink(ctx *gin.Context) {
 	linkID := ctx.Param("id")
-	userID, _ := ctx.Get("user_id")
+	userID, _ := ctx.Get("userId")
 
 	err := h.svc.DeleteLink(linkID, userID.(int))
 	if err != nil {
@@ -96,6 +128,14 @@ func (h *LinkHandler) DeleteLink(ctx *gin.Context) {
 	})
 }
 
+// Redirect godoc
+// @Summary Redirect to original URL
+// @Description Redirect user to original URL using slug
+// @Tags redirect
+// @Param slug path string true "Short link slug"
+// @Success 302
+// @Failure 404 {object} models.Response
+// @Router /api/{slug} [get]
 func (h *LinkHandler) Redirect(ctx *gin.Context) {
 	slug := ctx.Param("slug")
 
