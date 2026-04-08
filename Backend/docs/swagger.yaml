@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:8888
+info:
+  contact: {}
+  description: this is basic bakcend apps with DI
+  title: Backend shortlink
+  version: 1.0.0
+paths: {}
+swagger: "2.0"
