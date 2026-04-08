@@ -18,7 +18,8 @@ func SetupRoutes(r *gin.Engine, conn *pgxpool.Pool) {
 	{
 		a.POST("/register", userHandler.Create)
 		a.POST("/login", userHandler.Login)
-		l := a.Group("/links", middleware.AuthMiddleware())
+		l := a.Group("/links")
+		l.Use(middleware.AuthMiddleware())
 		{
 			l.POST("", linkHandler.CreateLink)
 			l.GET("", linkHandler.GetUserLinks)
