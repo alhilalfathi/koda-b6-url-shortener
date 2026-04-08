@@ -7,9 +7,6 @@ import (
 	"koda-b6-url-shortener/internal/routes"
 	"os"
 
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
-
 	_ "koda-b6-url-shortener/docs"
 
 	"github.com/gin-gonic/gin"
@@ -17,14 +14,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// @title Backend shortlink
-// @version 1.0.0
-// @description API for URL Shortener Link
-// @host localhost:8888
-// @BasePath /
-// @securityDefinitions.apikey BearerAuth
-// @in header
-// @name Authorization
 func main() {
 
 	godotenv.Load()
@@ -62,7 +51,6 @@ func main() {
 
 	r := gin.Default()
 	r.Use(middleware.CorsMiddleware())
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.SetupRoutes(r, pool)
 

@@ -6,8 +6,18 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @title Backend shortlink
+// @version 1.0.0
+// @description API for URL Shortener Link
+// @host localhost:8888
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func SetupRoutes(r *gin.Engine, conn *pgxpool.Pool) {
 	container := di.NewContainer(conn)
 
@@ -27,4 +37,5 @@ func SetupRoutes(r *gin.Engine, conn *pgxpool.Pool) {
 		}
 	}
 	r.GET("/:slug", linkHandler.Redirect)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
