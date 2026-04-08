@@ -107,7 +107,7 @@ go run cmd/main.go
 #### Menjalankan Frontend:
 ```Bash
 cd frontend
-cp .env.example .env # Pastikan API_URL mengarah ke localhost:8080
+cp .env.example .env # Pastikan API_URL mengarah ke localhost:8888
 
 # Install dependencies & jalankan UI
 npm install
